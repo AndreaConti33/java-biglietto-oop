@@ -2,44 +2,57 @@ package it.biglietti;
 
 import java.util.Scanner;
 
-// @author MarcoFabretti,  AndreaConti33, LucaVigentini, FrancescaPompi
+//@author MarcoFabretti,  AndreaConti33, LucaVigentini, FrancescaPompi
 
 public class Biglietteria {
 	public static void main(String[] args) {
 
 		Scanner scan = new Scanner(System.in);
+
 		boolean valido = true;
-		Biglietto biglietto = new Biglietto(0, 0);
-		System.out.println("Inserire numero di chilometri da percorrere: ");
+		int km = 0;
+		int eta = 0;
+		String sceltaBiglietto;
+		Biglietto biglietto = null;
+		boolean valid = false;
+
 		do {
+			System.out.println("Inserire numero di chilometri da percorrere: ");
+			km = scan.nextInt();
+			System.out.println("Hai digitato " + km + " chilometri.");
+
+			System.out.println("Inserire l'et� del passeggero: ");
+			eta = scan.nextInt();
+			System.out.println("Hai digitato " + eta + " anni");
+
+			System.out.println("Scegliere biglietto normale (30 giorni) o flessibile (90 giorni): ");
+			scan.nextLine();
+
+			do {
+				sceltaBiglietto = scan.nextLine().toLowerCase();
+				if (sceltaBiglietto.equals("normale")) {
+					valido = false;
+					break;
+				} else if (sceltaBiglietto.equals("flessibile")) {
+					valido = true;
+					break;
+				} else {
+					System.out.println("Scrivi normale o flessibile.");
+				}
+			} while (!sceltaBiglietto.equals("normale") || !sceltaBiglietto.equals("flessibile"));
 
 			try {
-				biglietto.setKm(scan.nextInt());
-				valido = Biglietto.isValidKm(biglietto.getKm());
+				biglietto = new Biglietto(km, eta, valido);
+				valid = true;
 			} catch (Exception e) {
-				System.out.println("Il valore deve essere int ");
-				scan.nextLine();
-				valido = false;
+				valid = false;
 			}
-		} while (valido == false);
 
-		System.out.println("Hai digitato " + biglietto.getKm() + " chilometri.");
-		valido = true;
+		} while (valid == false);
 
-		System.out.println("Inserire l'et� del passeggero: ");
-		do {
-			try {
-				biglietto.setEta(scan.nextInt());
-				valido = Biglietto.isValidEta(biglietto.getEta());
-			} catch (Exception e) {
-				System.out.println("Il valore deve essere int");
-				scan.nextLine();
-				valido = false;
-			}
-		} while (valido == false);
-
-		System.out.println("Hai digitato " + biglietto.getEta() + " anni");
+		System.out.println("Ciao");
 		System.out.println("Il costo del biglietto �: " + biglietto.calcolaPrezzo() + " euro");
+
 		scan.close();
 
 	}
